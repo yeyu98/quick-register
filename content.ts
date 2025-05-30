@@ -2,33 +2,31 @@
  * @Author: yeyu98
  * @Date: 2025-05-30 21:20:18
  * @LastEditors: yeyu98
- * @LastEditTime: 2025-05-30 22:18:30
+ * @LastEditTime: 2025-05-30 23:03:44
  * @Description: 
  */
 import type { PlasmoCSConfig } from "plasmo"
 
 export const config: PlasmoCSConfig = {
-  // matches: ["https://www.plasmo.com/*"]
-  matches: ["https://*/*"]
+  matches: ["https://www.marklines.com/*"]
+  // matches: ["https://*/*"]
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log("onMessage", request, sender, sendResponse)
   const {data} = request
-  const name = document.querySelector('#name') as HTMLInputElement
-  const corp = document.querySelector('#corp') as HTMLInputElement
-  const dept = document.querySelector('#dept') as HTMLInputElement
-  const position = document.querySelector('#position') as HTMLInputElement
-  const tel = document.querySelector('#tel') as HTMLInputElement
+  const keys = ['name', 'corp', 'dept', 'position', 'tel']
+  keys.forEach( (key) => {
+    const input = document.querySelector(`#${key}`) as HTMLInputElement
+    if(input) {
+      input.value = data[key]
+      input.dispatchEvent(new CustomEvent('input'))
+    }
+  })
   const country = document.querySelector('#country') as HTMLSelectElement
-
-  if (name && corp && dept && position && tel && country) {
-    name.value = data.name
-    corp.value = data.company
-    dept.value = data.department
-    position.value = data.position
-    tel.value = data.phone
+  if(country) {
     country.value = "2"
+    country.dispatchEvent(new CustomEvent('change'))
   }
-  sendResponse(name)
+  sendResponse("填写完成~~")
 })
