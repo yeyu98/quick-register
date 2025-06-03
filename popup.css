@@ -1,0 +1,28 @@
+button {
+    --primary-color: #fef000;
+    background-color: var(--primary-color);
+    color: #000;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+}
+
+.popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    padding: 10px;
+}
+
+.marklines-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.loading-icon {
+    width: 16px;
+    height: 16px;
+}

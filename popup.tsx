@@ -5,30 +5,31 @@
  * @LastEditTime: 2025-05-30 22:21:06
  * @Description: 
  */
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { generateForm } from "./utils"
+import loading from './assets/loading.gif'
+import './popup.css'
 
 function IndexPopup() {
-  const [status, setStatus] = useState(1)
-
-  const statusText = useMemo(() => status === 1 ? "暂无" : "生成中...", [status])
+  const [status, setStatus] = useState(false)
 
   const handleClick = async() => {
-    setStatus(2)
+    setStatus(true)
     const message = await generateForm()
     const [currentTab] = await chrome.tabs.query({ active: true, currentWindow: true })
     const response = await chrome.tabs.sendMessage(currentTab.id, {data: message})
-    console.log("click", currentTab, response)
-    setStatus(1)
+    console.log("response", response)
+    if(response === "done") {
+      setStatus(false)
+    }
   }
 
   return (
-    <div
-      style={{
-        padding: 16
-      }}>
-        <div>状态：{statusText}</div>
-        <button onClick={handleClick}>表单生成</button>
+    <div className="popup">
+        <button className="marklines-button" onClick={handleClick}>
+          <span>marklines表单生成</span>
+          {status && <img className="loading-icon" src={loading} alt="loading" />}
+        </button>
     </div>
   )
 }

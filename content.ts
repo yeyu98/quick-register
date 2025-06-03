@@ -16,6 +16,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log("onMessage", request, sender, sendResponse)
   const {data} = request
   const keys = ['name', 'corp', 'dept', 'position', 'tel']
+  const submit = document.querySelector('.submit') as HTMLInputElement
   keys.forEach( (key) => {
     const input = document.querySelector(`#${key}`) as HTMLInputElement
     if(input) {
@@ -28,5 +29,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     country.value = "2"
     country.dispatchEvent(new CustomEvent('change'))
   }
-  sendResponse("填写完成~~")
+  if(submit) {
+    setTimeout(() => {
+      submit.click()
+      sendResponse("done")
+    }, 200)
+  }
 })
