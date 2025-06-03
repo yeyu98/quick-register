@@ -6,27 +6,71 @@
  * @Description: 
  */
 import type { PlasmoCSConfig } from "plasmo"
+import { FormType } from "./utils/enum"
 
 export const config: PlasmoCSConfig = {
-  matches: ["https://www.marklines.com/*"]
+  matches: ["https://www.globalnevs.com/*"]
   // matches: ["https://*/*"]
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  console.log("onMessage", request, sender, sendResponse)
-  const {data} = request
+interface FormValueParams {selector: string, value: string, eventType: string}
+type ActualFormValue = Omit<FormValueParams, 'eventType'>
+
+const setFormValue = <T extends HTMLInputElement | HTMLSelectElement>(params: FormValueParams) => {
+  const {selector, value, eventType} = params
+  const formItem = document.querySelector<T>(selector)
+  if(formItem) {
+    formItem.value = value
+    formItem.dispatchEvent(new CustomEvent(eventType))
+  }
+}
+
+const setInputValue = (params: ActualFormValue) => {
+  const {selector, value} = params
+  setFormValue<HTMLInputElement>({selector, value, eventType: 'input'})
+}
+
+const setSelectValue = (params: ActualFormValue) => {
+  const {selector, value} = params
+  setFormValue<HTMLSelectElement>({selector, value, eventType: 'change'})
+}
+
+
+const handleMarklines = (data: any) => {
   const keys = ['name', 'corp', 'dept', 'position', 'tel']
   keys.forEach( (key) => {
-    const input = document.querySelector(`#${key}`) as HTMLInputElement
-    if(input) {
-      input.value = data[key]
-      input.dispatchEvent(new CustomEvent('input'))
-    }
+    setInputValue({selector: `#${key}`, value: data[key]})
   })
-  const country = document.querySelector('#country') as HTMLSelectElement
-  if(country) {
-    country.value = "2"
-    country.dispatchEvent(new CustomEvent('change'))
+  setSelectValue({selector: '#country', value: '2'})
+}
+
+const handleGlobalnevs = (data: any) => {
+  const password = 'Aa123456'
+  const country = '1'
+  const positionType = '4'
+  const jobType = '5'
+  const deptName = '销售部'
+
+  setSelectValue({selector: '#form_item_country', value: country})
+
+  setInputValue({selector: '#form_item_password', value: password})
+  setInputValue({selector: '#form_item_userName', value: data.name})
+  setInputValue({selector: '#form_item_phone', value: data.tel})
+  setInputValue({selector: '#form_item_deptName', value: deptName})
+  setInputValue({selector: '#form_item_companyName', value: data.corp})
+
+  setSelectValue({selector: '#form_item_jobType', value: jobType})
+  setSelectValue({selector: '#form_item_positionType', value: positionType})
+} 
+
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+  console.log("onMessage", request, sender, sendResponse)
+  const {data, type} = request
+
+  if(type === FormType.Marklines) {
+    handleMarklines(data)
+  } else {
+    handleGlobalnevs(data)
   }
 
 
