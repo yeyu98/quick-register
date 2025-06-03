@@ -6,8 +6,8 @@
  * @Description: 
  */
 import { useState } from "react"
+import CButton from "./components/CButton"
 import { generateForm } from "./utils"
-import loading from './assets/loading.gif'
 import './popup.css'
 
 function IndexPopup() {
@@ -26,10 +26,8 @@ function IndexPopup() {
 
   return (
     <div className="popup">
-        <button className="marklines-button" onClick={handleClick}>
-          <span>marklines表单生成</span>
-          {status && <img className="loading-icon" src={loading} alt="loading" />}
-        </button>
+       <CButton style={{marginBottom: 10}} text="marklines表单生成" loading={status} onClick={handleClick} />
+       <CButton text="globalnevs表单生成" loading={status} onClick={handleClick} />
     </div>
   )
 }
