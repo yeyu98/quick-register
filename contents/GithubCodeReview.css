@@ -1,8 +1,58 @@
+.github-code-review-container {
+    position: fixed;
+    bottom: 18vh;
+    right: 18vh;
+    z-index: 1000;
+}
 .github-code-review {
-    /* position: fixed;
-    top: 10px;
-    z-index: 1000; */
+    --width: 100px;
+    position: relative;
+    width: var(--width);
+    height: calc(var(--width) / 2);
+    border-radius: 12px;
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.github-code-review::before {
+    --color: red;
+    content: '';
     position: absolute;
-    top: 100px;
-    left: 100px;
+    z-index: -2;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 150%;
+    height: 300%;
+    background-color: #000;
+    background-repeat: no-repeat;
+    background-size: 50% 50%;
+    background-position: 0 0;
+    background-image: conic-gradient(var(--color), var(--color));
+    animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+
+.github-code-review::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    left: 2px;
+    top: 2px;
+    width: calc(100% - 8px);
+    height: calc(100% - 8px);
+    background: #000;
+    border-radius: 10px;
 }
