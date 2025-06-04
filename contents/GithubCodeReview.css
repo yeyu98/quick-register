@@ -1,0 +1,8 @@
+.github-code-review {
+    /* position: fixed;
+    top: 10px;
+    z-index: 1000; */
+    position: absolute;
+    top: 100px;
+    left: 100px;
+}
